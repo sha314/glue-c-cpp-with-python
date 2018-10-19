@@ -1,10 +1,17 @@
 from distutils.core import setup, Extension
 
+src_directory = 'src'
+
+source_list = [src_directory + '/ext3.cpp']
+
 module1 = Extension(
 	'myextension',
 	include_dirs = ['/usr/local/include'],
 	libraries = ['pthread'],
-	sources=['ext3.c']
+	sources=source_list,
+	language="c++",  # so that the compiler knows about the language
+	extra_compile_args=["-std=c++11"],
+	extra_link_args=["-std=c++11"]
 	)
 	
 setup(
