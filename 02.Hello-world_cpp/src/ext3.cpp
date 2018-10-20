@@ -11,6 +11,12 @@ struct module_state {
 
 #define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
 
+static PyObject *
+hello_world(PyObject *self) {
+    cout << "In C++, Hello world" << endl;
+    return PyUnicode_FromFormat(""); // returning empty string
+}
+
 
 static PyObject *
 say_hello(PyObject *self, PyObject *args) {
@@ -44,7 +50,8 @@ List of method definitions
 **/
 static PyMethodDef myextension_methods[] = {
     {"error_out", (PyCFunction)error_out, METH_NOARGS, NULL},
-    {"say_hello", (PyCFunction)say_hello, METH_VARARGS, "hello description"},
+    {"hello_world", (PyCFunction)hello_world, METH_NOARGS, "hello world. no argument"},
+    {"say_hello", (PyCFunction)say_hello, METH_VARARGS, "hello with one string argument"},
     {NULL, NULL}
 };
 

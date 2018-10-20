@@ -7,6 +7,8 @@
 #include <iostream>
 
 
+static PyObject * hello_world(PyObject *self);
+
 static PyObject * say_hello(PyObject *self, PyObject *args);
 
 static PyObject * error_out(PyObject *m);
