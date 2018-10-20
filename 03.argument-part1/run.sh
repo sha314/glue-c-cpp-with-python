@@ -1,6 +1,5 @@
 #!/bin/bash
 # to compile in python 3
-
 echo --------------------------------------------------
 echo building
 
@@ -10,4 +9,3 @@ echo --------------------------------------------------
 echo testing
 
 /usr/bin/python3 test.py
-

@@ -4,9 +4,13 @@ homedir = os.environ['HOME']  # get the home_directory
 # print (homedir)
 
 scr_dir = 'src'
-source_list = [scr_dir + '/ext3.cpp']
+
+source_list = [
+		scr_dir + '/ext3.cpp',
+		]
 
 include_directory_list = [
+		scr_dir + '/include',
 		'/usr/local/include',
 		homedir + '/.local/lib/python3.6/site-packages/numpy/core/include/numpy/'
 		]
@@ -29,3 +33,4 @@ setup(
 	url='not provided',
 	ext_modules=[module1]
 	)
+
