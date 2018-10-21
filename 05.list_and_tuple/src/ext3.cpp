@@ -119,7 +119,7 @@ then square each element it and return the squared sum
 PyObject *
 copy_and_square_sum(PyObject *self, PyObject *list)
 {
-    auto vec = to_vector<long>(list);
+    auto vec = list_to_vector<long>(list);
     long total{};
     cout << "c++ vector" << endl;
     cout << '{';    
@@ -145,9 +145,9 @@ sum_two_array_by_keyword_args(PyObject *self, PyObject *args, PyObject *kwargs){
         return NULL;
     }
     cout << "c++ : parsing first list" << endl;
-    vector<long> vec1 = to_vector<long>(a);
+    vector<long> vec1 = list_to_vector<long>(a);
     cout << "c++ : parsing 2nd list" << endl;
-    vector<long> vec2 = to_vector<long>(b);
+    vector<long> vec2 = list_to_vector<long>(b);
     if(vec1.size() != vec2.size()){
         cout << "size mismatched : line " << __LINE__ << endl;
         return nullptr;
@@ -160,7 +160,48 @@ sum_two_array_by_keyword_args(PyObject *self, PyObject *args, PyObject *kwargs){
     vec1.clear();
     vec2.clear();
 
-    return to_python_list<long>("l", vec3);
+    return vector_to_list<long>("l", vec3);
+}
+
+static PyObject* tuple_sum(PyObject* self, PyObject *args) {
+    PyObject *py_tuple;
+    size_t len;
+    
+    if (!PyArg_ParseTuple(args, "O", &py_tuple)) {
+      return NULL;
+    }
+
+    auto vec = tuple_to_vector<long>(py_tuple);
+    
+    long sum{};
+    for(size_t i{}; i < vec.size(); ++i){
+        sum += vec[i];
+    }
+    vec.clear();
+   //c_array is our array of ints :)
+    return Py_BuildValue("l", sum);
+}
+
+/**
+ recieve a tuple and then return it by squaring each element
+**/
+static PyObject* round_trip(PyObject* self, PyObject *args) {
+    PyObject *py_tuple;
+    size_t len;
+    
+    if (!PyArg_ParseTuple(args, "O", &py_tuple)) {
+      return NULL;
+    }
+
+    auto vec = tuple_to_vector<long>(py_tuple);
+    
+    long sum{};
+    for(size_t i{}; i < vec.size(); ++i){
+        vec[i] = vec[i]*vec[i];
+    }
+    PyObject * result = vector_to_tuple<long>("l", vec);
+   //c_array is our array of ints :)
+    return result;
 }
 
 
@@ -182,6 +223,8 @@ static PyMethodDef myextension_methods[] = {
     {"sum_list", (PyCFunction)sum_list, METH_O, "give a list and I will sum it up"},
     {"copy_and_sum", (PyCFunction)copy_and_sum, METH_O, "give a list and i will copy it to a vector and sum it up"},
     {"copy_and_squared_sum", (PyCFunction)copy_and_square_sum, METH_O, "give a list and i will copy it to a vector and return squared sum"},
+    {"tuple_sum", (PyCFunction)tuple_sum, METH_VARARGS, "give a tuple and i will copy it to a vector and return sum"},
+    {"round_trip", (PyCFunction)round_trip, METH_VARARGS, "give a tuple and i will copy it to a vector, raise it to 2 and return it"},
     {"copy_and_sum_two_list_by_keyword_args", (PyCFunction)sum_two_array_by_keyword_args, METH_VARARGS | METH_KEYWORDS, "give a list and i will copy it to a vector and return squared sum"},
     
 

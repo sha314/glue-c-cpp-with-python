@@ -18,7 +18,7 @@ todo:
           ...
 ****/
 template <class T>
-std::vector<T> to_vector(PyObject *list){
+std::vector<T> list_to_vector(PyObject *list){
     std::cout << "to_vector(PyObject*) : line " << __LINE__ << std::endl;
     Py_ssize_t i, n;
     T value;
@@ -46,6 +46,32 @@ std::vector<T> to_vector(PyObject *list){
     }
     return vec;
 }
+
+template <class T>
+std::vector<T> tuple_to_vector(PyObject *py_tuple){
+    std::cout << "tuple_to_vector(PyObject*) : line " << __LINE__ << std::endl;
+
+    PyObject *item;
+    int len = PyTuple_Size(py_tuple);
+    if (len < 0){
+        std::cerr << "Not a list : line " << __LINE__ << std::endl;
+        exit(-1);
+    }
+    std::vector<T> vec(len);
+    T value;
+    for(size_t i{}; i < len; ++i){
+        item = PyTuple_GetItem(py_tuple, i);
+        if (!PyLong_Check(item)){ 
+            std::cout << "non-integer at " << i << " : line " << __LINE__ << std::endl;
+            continue; /* Skip non-integers */
+        }
+        value = PyLong_AsLong(item);
+        vec[i] = value;
+    }
+
+    return vec;
+}
+
 
 
 // template <class T>
@@ -94,13 +120,13 @@ std::vector<T> to_vector(PyObject *list){
 
 
 template <class T>
-PyObject * to_python_list(std::string tp, std::vector<T>& vec){
+PyObject * vector_to_list(std::string tp, std::vector<T>& vec){
     std::cout << "to_python_list(std::string, PyObject*) : line " << __LINE__ << std::endl;
     size_t n = vec.size();
     Py_ssize_t sz = n;
     PyObject * list = PyList_New(sz);  // new list of size n
-    sz = PyList_Size(list);
-    std::cout <<  sz;
+    // sz = PyList_Size(list);
+    // std::cout <<  sz;
     PyObject *item;
     
 
@@ -117,5 +143,34 @@ PyObject * to_python_list(std::string tp, std::vector<T>& vec){
 
     return list;
 }
+
+
+template <class T>
+PyObject * vector_to_tuple(std::string tp, std::vector<T>& vec){
+    std::cout << "to_python_list(std::string, PyObject*) : line " << __LINE__ << std::endl;
+    size_t n = vec.size();
+    Py_ssize_t sz = n;
+    PyObject * list = PyTuple_New(sz);  // new list of size n
+    // sz = PyTuple_Size(list);
+    // std::cout <<  sz;
+    PyObject *item;
+    
+
+    for(size_t i{}; i < n ; ++i){
+        // item = Py_BuildValue("l", vec[i]); // only for long
+        item = Py_BuildValue(tp.c_str(), vec[i]);
+        if(!PyTuple_SetItem(list, i, item)){
+            continue;
+        }else{
+            std::cerr << "cannot set item : line " << __LINE__ << std::endl;
+            exit(-1);
+        }
+    }
+
+    return list;
+}
+
+
+
 
 #endif // __HEADER_CONVERTER_H__

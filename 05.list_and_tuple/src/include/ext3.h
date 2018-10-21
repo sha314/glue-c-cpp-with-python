@@ -22,4 +22,6 @@ static PyObject * copy_and_square_sum(PyObject *self, PyObject *list);
 static PyObject* sum_two_array_by_keyword_args(
 	PyObject *self, PyObject *args, PyObject *kwargs);
 
+static PyObject* tuple_sum(PyObject* self, PyObject *args);
+
 #endif // __HEADER_EXT3_H__
