@@ -78,10 +78,49 @@ optional_keyword_argument_add(PyObject *self,
                                      &b)) {
         return NULL;
     }
+
     if(b==0){
-        cout << "second argument is not provided and default value 0 is used" << endl;
+        cout << "second argument is not provided"
+             << "and default value is used" << endl;
     }
+    cout << "a=" << a << endl;
+    cout << "b=" << b << endl;
+
     return PyLong_FromLong(a + b);
+}
+
+
+static PyObject*
+optional_keyword_argument_py_object(PyObject *self,
+                                 PyObject *args,
+                                 PyObject *kwargs){
+
+    static char* keywords[] = {"a", "b", NULL}; // "a", "b" are the keyword of the argument
+
+    PyObject* a;
+    PyObject* b=nullptr;
+    long c_a{}, c_b{};
+    if (!PyArg_ParseTupleAndKeywords(args,
+                                     kwargs,
+                                     "O|O",
+                                     keywords,
+                                     &a,
+                                     &b)) {
+        return NULL;
+    }
+    c_a = PyLong_AsLong(a);
+    
+    if(b==nullptr){
+        cout << "second argument is not provided"
+             << "and default value is used" << endl;
+        c_b = 0;
+    }else{
+        c_b = PyLong_AsLong(b);
+    }
+    cout << "a=" << c_a << endl;
+    cout << "b=" << c_b << endl;
+
+    return PyLong_FromLong(c_a + c_b);
 }
 
 
@@ -101,6 +140,7 @@ static PyMethodDef myextension_methods[] = {
     {"one_keyword_argument", (PyCFunction)one_keyword_argument, METH_VARARGS | METH_KEYWORDS, "one (long) keyword argument"},
     {"mandatory_keyword_argument_add", (PyCFunction)mandatory_keyword_argument_add, METH_VARARGS | METH_KEYWORDS, "two mandatory keyword argument"},
     {"optional_keyword_argument_add", (PyCFunction)optional_keyword_argument_add, METH_VARARGS | METH_KEYWORDS, "two keyword argument. one optional"},
+    {"optional_keyword_argument_py_object", (PyCFunction)optional_keyword_argument_py_object, METH_VARARGS | METH_KEYWORDS, "two keyword argument. one optional. both are general type PyObject*"},
     {NULL, NULL}
 };
 
