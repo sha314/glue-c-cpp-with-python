@@ -31,17 +31,14 @@ std::vector<T> list_to_vector(PyObject *list){
         exit(-1);
     }
     for (i = 0; i < n; i++) {
-//      std::cout << "line :" << __LINE__ << std::endl;       
         item = PyList_GetItem(list, i); /* Can't fail */
         if (!PyLong_Check(item)) continue; /* Skip non-integers */
         value = PyLong_AsLong(item);
-//      std::cout << "line :" << __LINE__ << std::endl;
         if (value == -1 && PyErr_Occurred()){
             /* Integer too big to fit in a C long, bail out */
             std::cout << "Integer too big to fit in a C long, bail out. line :" << __LINE__ << std::endl;
             exit(-1);            
         }
-//          std::cout << "line :" << __LINE__ << std::endl;
         vec[i] = value;
     }
     return vec;
@@ -73,6 +70,8 @@ std::vector<T> tuple_to_vector(PyObject *py_tuple){
 }
 
 
+std::vector<std::vector<long>> get_matrix(PyObject* py_mat);
+PyObject* get_python_matrix(std::vector<std::vector<long>>& mat);
 
 // template <class T>
 // std::vector<T> to_vector_v2(PyObject *list){
@@ -121,18 +120,18 @@ std::vector<T> tuple_to_vector(PyObject *py_tuple){
 
 template <class T>
 PyObject * vector_to_list(std::string tp, std::vector<T>& vec){
-    std::cout << "to_python_list(std::string, PyObject*) : line " << __LINE__ << std::endl;
+    std::cout << "vector_to_list(std::string, std::vector<T>&) : line " << __LINE__ << std::endl;
     size_t n = vec.size();
     Py_ssize_t sz = n;
     PyObject * list = PyList_New(sz);  // new list of size n
     // sz = PyList_Size(list);
     // std::cout <<  sz;
     PyObject *item;
-    
 
     for(size_t i{}; i < n ; ++i){
         // item = Py_BuildValue("l", vec[i]); // only for long
         item = Py_BuildValue(tp.c_str(), vec[i]);
+        std::cout << "inside " << i << std::endl;
         if(!PyList_SetItem(list, i, item)){
             continue;
         }else{
@@ -147,7 +146,7 @@ PyObject * vector_to_list(std::string tp, std::vector<T>& vec){
 
 template <class T>
 PyObject * vector_to_tuple(std::string tp, std::vector<T>& vec){
-    std::cout << "to_python_list(std::string, PyObject*) : line " << __LINE__ << std::endl;
+    std::cout << "vector_to_tuple(std::string, std::vector<T>&) : line " << __LINE__ << std::endl;
     size_t n = vec.size();
     Py_ssize_t sz = n;
     PyObject * list = PyTuple_New(sz);  // new list of size n

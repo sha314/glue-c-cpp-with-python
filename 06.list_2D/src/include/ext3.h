@@ -14,14 +14,11 @@
 
 static PyObject * error_out(PyObject *m);
 
-static PyObject * view(PyObject *self, PyObject *list);
-static PyObject * sum_list(PyObject *self, PyObject *list);
-static PyObject * copy_and_sum(PyObject *self, PyObject *list);
-static PyObject * copy_and_square_sum(PyObject *self, PyObject *list);
-
-static PyObject* sum_two_array_by_keyword_args(
+static PyObject* view(PyObject *self, PyObject *list);
+static PyObject* view_matrix(PyObject *self, PyObject *args);
+static PyObject* round_trip(PyObject *self, PyObject *list);
+static PyObject* mat_mul(
 	PyObject *self, PyObject *args, PyObject *kwargs);
 
-static PyObject* tuple_sum(PyObject* self, PyObject *args);
 
 #endif // __HEADER_EXT3_H__

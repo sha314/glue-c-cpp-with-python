@@ -6,6 +6,7 @@ homedir = os.environ['HOME']  # get the home_directory
 scr_dir = 'src'
 
 source_list = [
+		scr_dir + '/matrix.cpp',
 		scr_dir + '/view.cpp',
 		scr_dir + '/converter.cpp',
 		scr_dir + '/ext3.cpp'		
