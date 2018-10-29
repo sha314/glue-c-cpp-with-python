@@ -1,13 +1,11 @@
-# python_c_api_example
-Python C/C++ API examples
+# How to glue Python with C/C++ programs
 
 Writing Python Module in C++ so that complex operation can be performed efficiently.
+This is a tutorial based project. Here C/C++ codes are glued with Python using the following tools.
+
+01. Python C/C++ API
+02. Cython
+03. SWIG
+04. BOOST
 
 
-# Lists of Examples
-01. Hello world using C
-02. Hello world using C++
-03. Passing Simple arguments to C++ from python
-04. Passing keyword argument to C++ from python
-05. Passing List and Tuple to C++ from python (1 dimensional) and getting 	reture value
-06. Passing List to C++ from python (multi dimensional) and getting return value
