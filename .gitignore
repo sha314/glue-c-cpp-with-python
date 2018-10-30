@@ -1,2 +1,4 @@
 *.so
 *.o
+*.cxx
+*.pyc  # python cache file
