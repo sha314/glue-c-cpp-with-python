@@ -6,7 +6,8 @@ swig -python -c++ carray.i
 
 # compiling
 echo compiling......................................
-g++ -fPIC -c -std=c++11 src/myarray.cpp carray_wrap.cxx -I/usr/include/python3.6m/
+#g++ -fPIC -c -std=c++11 src/myarray.cpp carray_wrap.cxx -I/usr/include/python3.6m/
+g++ -fPIC -c -std=c++11 src/myarray.cpp carray_wrap.cxx  -I/usr/include/python3.6m -I/home/shahnoor/.local/lib/python3.6/site-packages/numpy/core/include/
 
 # or
 #-I/home/shahnoor/software/anaconda3/include/python3.7m/
