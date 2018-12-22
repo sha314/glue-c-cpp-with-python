@@ -26,6 +26,12 @@ void convolve1d(
     int thread_count,
     double **data_out, int *dim_out)
 {
+    /**
+        use of vector and then converting it to a pointer by taing the address of the
+        first element for return value leads to error since python also tries to 
+        free up memories that are already freed by vector. solution : use naked array
+        in such case.
+    **/
     vector<double>   _forward_factor(columns),  _backward_factor(columns);
 
     for (size_t i=0; i < columns; ++i)
@@ -36,8 +42,8 @@ void convolve1d(
 
     cout << "cols " << columns << endl;
 
-    // double *arr = new double[columns];
-    std::vector<double> arr(columns);
+    double *arr = new double[columns];
+    // std::vector<double> arr(columns);
     
     size_t step = columns / 1000 + 1;
 
@@ -98,8 +104,8 @@ void convolve1d(
 
     // setting return value
     *dim_out = columns;
-    // *data_out = arr; // if arr is naked array 
-    *data_out = &arr[0]; // if arr is a vector
+    *data_out = arr; // if arr is naked array 
+    // *data_out = &arr[0]; // if arr is a vector
 
 }
 
@@ -119,7 +125,12 @@ void convolve2d(
     int thread_count,
     double **data_out, int *dim1_out, int *dim2_out
     ){
-    
+    /**
+        use of vector and then converting it to a pointer by taing the address of the
+        first element for return value leads to error since python also tries to 
+        free up memories that are already freed by vector. solution : use naked array
+        in such case.
+    **/
     vector<double>   _forward_factor(n_rows),  _backward_factor(n_rows);
 
     for (size_t i=0; i < n_rows; ++i)
@@ -132,8 +143,8 @@ void convolve2d(
     // cout << "rows " << n_rows << endl;
     // cout << "cols " << n_columns << endl;
 
-    // double *arr = new double[n_rows*n_columns];
-    std::vector<double> arr(n_rows*n_columns);
+    double *arr = new double[n_rows*n_columns];
+    // std::vector<double> arr(n_rows*n_columns);
     
     size_t step = n_rows / 1000 + 1;
 
@@ -217,7 +228,7 @@ void convolve2d(
     // setting return value
     *dim1_out = n_rows;
     *dim2_out = n_columns;
-    // *data_out = arr; // if arr is naked array 
-    *data_out = &arr[0]; // if arr is a vector
+    *data_out = arr; // if arr is naked array 
+    // *data_out = &arr[0]; // if arr is a vector
 }
 
